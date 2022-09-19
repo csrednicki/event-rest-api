@@ -64,8 +64,10 @@ POST /owners/new
 PUT /owners/:id
 ```
 
-## Docker
+## How to access API
+This REST API is listening on port ```3600``` on machine which is running docker-compose.
 
+## Docker
 The project is based on an environment using docker-based containerisation and docker-compose. To start the project, issue the command: ```docker-compose up -d```
 
 ## Database
