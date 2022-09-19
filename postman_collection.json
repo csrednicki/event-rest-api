@@ -1,0 +1,624 @@
+{
+	"info": {
+		"_postman_id": "e90c68d9-2be2-48d6-9bfc-0189dc91d119",
+		"name": "ensono",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "events",
+			"item": [
+				{
+					"name": "Get all events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://sgu.home:3600/events/",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"events",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single event",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://sgu.home:3600/events/1",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete event",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://sgu.home:3600/events/10",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"events",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Schedule full",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Some new special event\",\r\n    \"price\": 100,\r\n    \"eventDate\": {\r\n        \"start\": \"2022-09-19 20:00\",\r\n        \"end\": \"2022-09-19 22:00\"\r\n    },\r\n    \"location\": {\r\n        \"place\": \"Really big hall\",\r\n        \"city\": \"Chicago\",\r\n        \"state\": \"IL\",\r\n        \"seats\": 5000\r\n    },\r\n    \"ownerContact\": {\r\n        \"email\": \"john.doe@gmail.com\",\r\n        \"firstName\": \"John\",\r\n        \"lastName\": \"Doe\",\r\n        \"phone\": \"+12345767890\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/events/new",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"events",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Schedule known owner",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"test event name\",\r\n    \"price\": 123.22,\r\n    \"active\": true,\r\n    \"eventDate\": {\r\n        \"start\": \"2022-09-18 20:00\",\r\n        \"end\": \"2022-09-18 22:00\"\r\n    },\r\n    \"location\": {\r\n        \"place\": \"testplace\",\r\n        \"city\": \"testcity\",\r\n        \"state\": \"teststate\",\r\n        \"seats\": 1000\r\n    },\r\n    \"ownerContact\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/events/new",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"events",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Schedule known location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"test event name\",\r\n    \"price\": 123.22,\r\n    \"eventDate\": {\r\n        \"start\": \"2022-09-18 20:00\",\r\n        \"end\": \"2022-09-18 22:00\"\r\n    },\r\n    \"location\": {\r\n        \"id\": 2\r\n    },\r\n    \"ownerContact\": {\r\n        \"email\": \"test@email.com\",\r\n        \"firstName\": \"Adam\",\r\n        \"lastName\": \"Bar\",\r\n        \"phone\": \"1234567444890\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/events/new",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"events",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Schedule known location and owner",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test event name\",\r\n    \"price\": 223.33,\r\n    \"eventDate\": {\r\n        \"start\": \"2022-09-18 20:00:11\",\r\n        \"end\": \"2022-09-18 22:00\"\r\n    },\r\n    \"location\": {\r\n        \"id\": 2\r\n    },\r\n    \"ownerContact\": {\r\n        \"id\": 2\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/events/new",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"events",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Schedule missing fields",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test event name\",\r\n    \"price\": 223.33,\r\n    \"eventDate\": {\r\n        \"start\": \"2022-09-18 20:00:11\",\r\n        \"end\": \"2022-09-18 22:00\"\r\n    },\r\n    \"location\": {\r\n        \"id\": 2\r\n    },\r\n    \"ownerContact\": {\r\n        \"id\": 2\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/events/new",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"events",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Schedule id not found",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test event name\",\r\n    \"price\": 223.33,\r\n    \"eventDate\": {\r\n        \"start\": \"2022-09-16 20:00:11\",\r\n        \"end\": \"2022-09-16 22:00\"\r\n    },\r\n    \"location\": {\r\n        \"id\": 222222\r\n    },\r\n    \"ownerContact\": {\r\n        \"id\": 2\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/events/new",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"events",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit event full",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Some new special event\",\r\n    \"price\": 123.22,\r\n    \"active\": false,\r\n    \"eventDate\": {\r\n        \"start\": \"2022-07-16 20:00\",\r\n        \"end\": \"2022-09-16 22:00\"\r\n    },\r\n    \"location\": {\r\n        \"place\": \"New name for big hall\",\r\n        \"city\": \"Chicago\",\r\n        \"state\": \"IL\",\r\n        \"seats\": 5000        \r\n    },\r\n    \"ownerContact\": {\r\n        \"email\": \"different.email@gmail.com\",\r\n        \"firstName\": \"John\",\r\n        \"lastName\": \"Doe\",\r\n        \"phone\": \"2223334440\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/events/1",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit event partly",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"active\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/events/1",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "search",
+			"item": [
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://sgu.home:3600/search/?q=microsoft",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"search",
+								""
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "microsoft"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "locations",
+			"item": [
+				{
+					"name": "Get all locations",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/locations/",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"locations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://sgu.home:3600/locations/1",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"locations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"location\": {\r\n        \"place\": \"Some special test place 333\",\r\n        \"city\": \"test city\",\r\n        \"state\": \"test state\",\r\n        \"seats\": 1000\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/locations/new",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"locations",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit location",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"location\": {\r\n        \"seats\": 5000,\r\n        \"place\": \"test - place1234\",\r\n        \"city\": \"test city 444\",\r\n        \"state\": \"test state 444\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/locations/2",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"locations",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete location",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://sgu.home:3600/locations/4",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"locations",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "owners",
+			"item": [
+				{
+					"name": "Get all owners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://sgu.home:3600/owners/",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"owners",
+								""
+							],
+							"query": [
+								{
+									"key": null,
+									"value": "  mbbk",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single owner",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://sgu.home:3600/owners/1",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"owners",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new owner",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ownerContact\": {\r\n        \"email\": \"some.new.contact@email.com\",\r\n        \"firstName\": \"Marian\",\r\n        \"lastName\": \"Blacy\",\r\n        \"phone\": \"3330321002\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/owners/new",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"owners",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit owner",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ownerContact\": {\r\n        \"email\": \"testss@email.com\",\r\n        \"firstName\": \"Adams\",\r\n        \"lastName\": \"Bars\",\r\n        \"phone\": 2234567890\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://sgu.home:3600/owners/11",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"owners",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete owner",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://sgu.home:3600/owners/11",
+							"protocol": "http",
+							"host": [
+								"sgu",
+								"home"
+							],
+							"port": "3600",
+							"path": [
+								"owners",
+								"11"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

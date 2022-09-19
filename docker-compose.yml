@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - 'ensono_pg:/var/lib/postgresql/data'
+      - './db:/docker-entrypoint-initdb.d'
+    environment:
+      POSTGRES_USER: ensonotest
+      POSTGRES_DB: ensonotest
+      POSTGRES_PASSWORD: ensonotest
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ensonotest"]
+      interval: 5s
+      timeout: 5s
+      retries: 5      
+
+  web:
+    build: .
+    command: npm run server
+    volumes:
+      - '.:/usr/app/'
+      - '/usr/app/node_modules'
+    ports:
+      - "3600:3600"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  ensono_pg:
