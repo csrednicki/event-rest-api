@@ -80,7 +80,7 @@ The project uses NodeJS in the latest available version. In the project, I use t
 
 ## Unit tests
 
-I created unit tests for the utilities the project uses. The tests are based on mocha and chai tools. To run the tests, issue the command in the project main directory: ```npm run test```. For the docker stack run command ```docker exec -it ensono-test_web_1 npm run test```
+I created unit tests for the utilities the project uses. The tests are based on mocha and chai tools. To run the tests, issue the command in the project main directory: ```npm run test```. For the docker stack run command ```docker exec -it event-rest-api_web_1 npm run test```
 
 ## Validation and sanitization
 
