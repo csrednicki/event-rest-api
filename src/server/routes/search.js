@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const utils = require('../utils');
-const db = require('../../pools');
 const validators = require('../validators');
 
 router.get('/search', validators.search, async function(request, response, next) {
