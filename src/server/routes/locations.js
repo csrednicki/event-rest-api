@@ -31,13 +31,12 @@ router.post('/locations/new', validators.createLocation, async function(request,
 router.put('/locations/:id', validators.editLocation, async function(request, response, next) {
     const id = parseInt(request.params.id)
     const { location } = request.body
-
-    let locationUpdate = [];
-    if(location.place) locationUpdate.push(`place='${location.place}'`);
-    if(location.city) locationUpdate.push(`city='${location.city}'`);
-    if(location.state) locationUpdate.push(`state='${location.state}'`);
-    if(location.seats) locationUpdate.push(`seats='${location.seats}'`);            
-    const updatedLocationFields = locationUpdate.join(',');
+    const updatedLocationFields = utils.getUpdateString({
+        "place": location.place,
+        "city": location.city,
+        "state": location.state,
+        "seats": location.seats
+    });
 
     const sql = `UPDATE locations SET ${updatedLocationFields} WHERE location_id = $1 RETURNING *`;
     await utils.put(sql, [id], utils.formatLocation.bind(utils), response);

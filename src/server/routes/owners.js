@@ -31,13 +31,12 @@ router.post('/owners/new', validators.createOwner, async function(request, respo
 router.put('/owners/:id', validators.editOwner, async function(request, response, next) {
     const id = parseInt(request.params.id)
     const { ownerContact } = request.body
-
-    let ownersUpdate = [];
-    if(ownerContact.firstName) ownersUpdate.push(`firstname='${ownerContact.firstName}'`);
-    if(ownerContact.lastName) ownersUpdate.push(`lastname='${ownerContact.lastName}'`);
-    if(ownerContact.email) ownersUpdate.push(`email='${ownerContact.email}'`);
-    if(ownerContact.phone) ownersUpdate.push(`phone='${ownerContact.phone}'`);
-    const updatedOwnerFields = ownersUpdate.join(',');
+    const updatedOwnerFields = utils.getUpdateString({
+        "email": ownerContact.email,
+        "firstname": ownerContact.firstName,
+        "lastname": ownerContact.lastName,
+        "phone": ownerContact.phone
+    });
 
     const sql = `UPDATE owners SET ${updatedOwnerFields} WHERE owner_id = $1 RETURNING *`;
     await utils.put(sql, [id], utils.formatOwner.bind(utils), response);
