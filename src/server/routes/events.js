@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const utils = require('../utils');
 const db = require('../../pools');
-const validators = require('../validators');
+const { formatEventBasic, formatRes, formatDate, errorHandler,
+    getUpdateString, getVal, get, create, put, deleteItem } = require('../utils');
+const { validateId, createEvent, editEvent } = require('../validators');
 
 router.get('/events', async function(request, response, next) {
     const sql = `SELECT *
@@ -10,31 +11,31 @@ router.get('/events', async function(request, response, next) {
         WHERE events.location_id=locations.location_id AND events.owner_id=owners.owner_id AND events.active='t'
         ORDER BY id ASC`;
 
-    await utils.get(sql, null, utils.formatEventBasic.bind(utils), response);
+    await get(sql, null, formatEventBasic, response);
 });
 
-router.get('/events/:id', validators.validateId, async function(request, response, next) {
+router.get('/events/:id', validateId, async function(request, response, next) {
     const id = parseInt(request.params.id)
     const sql = `SELECT * 
         FROM events, locations, owners 
         WHERE events.location_id=locations.location_id AND events.owner_id=owners.owner_id AND events.id = $1
         ORDER BY startdate DESC`;
-    await utils.get(sql, [id], utils.formatRes.bind(utils), response);
+    await get(sql, [id], formatRes, response);
 });
 
-router.delete('/events/:id', validators.validateId, async function(request, response, next) {
+router.delete('/events/:id', validateId, async function(request, response, next) {
     const id = parseInt(request.params.id)
     const sql = `DELETE FROM events WHERE events.id = $1 RETURNING *`;
-    await utils.delete(sql, [id], response);
+    await deleteItem(sql, [id], response);
 });
 
 // this endpoint is more complicated than usually because it changes 3 different tables
-router.post('/events/new', validators.createEvent, async function(request, response, next) {
+router.post('/events/new', createEvent, async function(request, response, next) {
     const { title, price, eventDate, location, ownerContact } = request.body
     
     // if this optional parameter "active" was passed as false it shoud stay that way
     // otherwise should be set to true
-    let active = request.body.active === false ? false : true;
+    let active = request.body.active === false ? "false" : "true";
     let location_id = false,
         owner_id = false,
         event_id = false;
@@ -53,7 +54,7 @@ router.post('/events/new', validators.createEvent, async function(request, respo
                 locationValues = [location.place, location.city, location.state, location.seats];
             }
    
-            location_id = utils.getVal(await db.pool.query(locationSql, locationValues)).location_id;
+            location_id = getVal(await db.pool.query(locationSql, locationValues)).location_id;
         } else {
             throw { name: 'Error', status: 422, message: 'Location: missing fields' };
         }
@@ -68,7 +69,7 @@ router.post('/events/new', validators.createEvent, async function(request, respo
                 ownerValues = [ownerContact.email, ownerContact.firstName, ownerContact.lastName, ownerContact.phone];
             }
 
-            owner_id = utils.getVal(await db.pool.query(ownerSql, ownerValues)).owner_id;
+            owner_id = getVal(await db.pool.query(ownerSql, ownerValues)).owner_id;
         } else {
             throw { name: 'Error', status: 422, message: 'ownerContact: missing fields' };
         }
@@ -76,7 +77,7 @@ router.post('/events/new', validators.createEvent, async function(request, respo
         if(location_id && owner_id) {
             const eventSql = `INSERT INTO events(title, price, startdate, enddate, active, location_id, owner_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`
             const eventValues = [title, price, eventDate.start, eventDate.end, active, location_id, owner_id];
-            event_id = utils.getVal(await db.pool.query(eventSql, eventValues)).id;
+            event_id = getVal(await db.pool.query(eventSql, eventValues)).id;
 
             if(event_id) {
                 const sql = `SELECT * 
@@ -84,7 +85,7 @@ router.post('/events/new', validators.createEvent, async function(request, respo
                 WHERE events.location_id=locations.location_id AND events.owner_id=owners.owner_id AND events.id = $1
                 ORDER BY startdate DESC`;
 
-                await utils.create(sql, [event_id], utils.formatRes.bind(utils), response);
+                await create(sql, [event_id], formatRes, response);
             } else {
                 throw { name: 'Error', status: 500, message: 'Event: error adding new event' };
             }
@@ -95,12 +96,12 @@ router.post('/events/new', validators.createEvent, async function(request, respo
         await db.pool.query('COMMIT')
     } catch (e) {
         await db.pool.query('ROLLBACK')
-        utils.errorHandler(e, response);
+        errorHandler(e, response);
     }  
 });
 
 // this endpoint is more complicated than usually because it changes 3 different tables
-router.put('/events/:id', validators.editEvent, async function(request, response, next) {
+router.put('/events/:id', editEvent, async function(request, response, next) {
     const id = parseInt(request.params.id)
     const { title, price, eventDate, location, ownerContact } = request.body
     let active = request.body.active === false ? "false" : "true";
@@ -125,7 +126,7 @@ router.put('/events/:id', validators.editEvent, async function(request, response
         }
 
         if(location && (location.place || location.city || location.state || location.seats)) {
-            const updatedLocationFields = utils.getUpdateString({
+            const updatedLocationFields = getUpdateString({
                 "place": location.place,
                 "city": location.city,
                 "state": location.state,
@@ -142,7 +143,7 @@ router.put('/events/:id', validators.editEvent, async function(request, response
         }
 
         if(ownerContact && (ownerContact.email || ownerContact.firstName || ownerContact.lastName || ownerContact.phone)) {
-            const updatedOwnerFields = utils.getUpdateString({
+            const updatedOwnerFields = getUpdateString({
                 "email": ownerContact.email,
                 "firstname": ownerContact.firstName,
                 "lastname": ownerContact.lastName,
@@ -158,11 +159,11 @@ router.put('/events/:id', validators.editEvent, async function(request, response
             }
         }
         if(event_id) {
-            const updatedFields = utils.getUpdateString({
+            const updatedFields = getUpdateString({
                 "title": title,
                 "price": price,
-                "startdate": (eventDate && eventDate.start) ? utils.formatDate(eventDate.start) : false,
-                "enddate": (eventDate && eventDate.end) ? utils.formatDate(eventDate.end) : false,
+                "startdate": (eventDate && eventDate.start) ? formatDate(eventDate.start) : false,
+                "enddate": (eventDate && eventDate.end) ? formatDate(eventDate.end) : false,
                 "active": active,
                 "location_id": location_id,
                 "owner_id": owner_id
@@ -178,7 +179,7 @@ router.put('/events/:id', validators.editEvent, async function(request, response
                 WHERE events.location_id=locations.location_id AND events.owner_id=owners.owner_id AND events.id = $1
                 ORDER BY startdate DESC`;
 
-                await utils.put(eventGetAll, [event_id], utils.formatRes.bind(utils), response);
+                await put(eventGetAll, [event_id], formatRes, response);
             } else {
                throw { name: 'Error', status: 400, message: results };
             }
@@ -187,7 +188,7 @@ router.put('/events/:id', validators.editEvent, async function(request, response
         await db.pool.query('COMMIT')
     } catch (e) {
         await db.pool.query('ROLLBACK')
-        utils.errorHandler(e, response);
+        errorHandler(e, response);
     }  
 });
 

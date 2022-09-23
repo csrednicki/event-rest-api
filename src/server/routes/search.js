@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const utils = require('../utils');
-const validators = require('../validators');
+const { formatEventBasic, get } = require('../utils');
+const { search } = require('../validators');
 
-router.get('/search', validators.search, async function(request, response, next) {
+router.get('/search', search, async function(request, response, next) {
     const query = request.query.q;
     const sql = `SELECT *
     FROM events, locations, owners
@@ -24,7 +24,7 @@ router.get('/search', validators.search, async function(request, response, next)
         )
     ORDER BY startdate DESC`;
     
-    await utils.get(sql, [`%${query}%`], utils.formatEventBasic.bind(utils), response);
+    await get(sql, [`%${query}%`], formatEventBasic, response);
 });
 
 module.exports = router;

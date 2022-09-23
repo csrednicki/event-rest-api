@@ -12,7 +12,7 @@ let ownersRoute = require('./routes/owners');
 app.use(bodyParser.json());
 
 // main routes
-app.use('/', [eventsRoute, searchRoute, locationsRoute, ownersRoute]);
+app.use([eventsRoute, searchRoute, locationsRoute, ownersRoute]);
 
 // parse url encoded forms data
 app.use(bodyParser.urlencoded({ extended: true }));
