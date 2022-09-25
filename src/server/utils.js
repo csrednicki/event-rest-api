@@ -2,9 +2,7 @@ const moment = require('moment');
 const db = require('../pools');
 
 // exported function expresssion
-exports.formatDate = (date) => {
-    return moment(date).format('YYYY-MM-DD HH:mm');
-}
+exports.formatDate = (date) => moment(date).format('YYYY-MM-DD HH:mm');
 
 exports.formatLocation = (res) => {
     if (res.location_id) {
